@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Web-Centric Computing Lab 1</title>
+</head>
+
+<body>
+    <div>
+        <form action="index.php" method="POST">
+            <p style="color: blue">
+            Enter your first name:
+            </p>
+            <input type"text" name="Firstname" value="<?php echo getFirst()?>" style="color: yellow; background-color: red"/>
+        
+            <p style="color: blue">
+                Enter your last name:
+            </p>
+            <input type="text"  name="Lastname" value="<?php echo getLast()?>" style="color: yellow; background-color: red"/>
+            <p style="color: blue">
+                Enter your message
+            </p>  
+            <textarea rows="4" cols='50'  name="comment" value="<?php echo getComment()?>" style="color: white; background-color: blue; border-color: black;">Your comment ...</textarea>
+            <p>
+                <input type="submit"    value="Submit" style="background-color: cyan; color: grey;"/>
+            </p>
+        </form>
+        
+        
+    </div>
+
+</body>
+</html>
