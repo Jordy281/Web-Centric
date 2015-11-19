@@ -1,0 +1,10 @@
+Login Page
+    - query data base
+
+Welcome Page
+    -Update User info
+    -delete User info
+
+Register Page
+    -Error Checking
+    -trim() -> to remove white space
