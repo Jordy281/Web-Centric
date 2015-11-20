@@ -19,7 +19,7 @@
 		</div>
 		<div class="container-fluid">
 			<div class = "row" id = "theContent">
-				<div id = "left-ish" class="col-sm-4">
+				<div id = "left-ish" class="col-sm-6">
 					<div class="row" id="buttonHolder">
 						<button id="signup" type="Sign Up" class="btn btn-default" onclick="showNewUser()">SIGN UP</button>
 						<button id="login" type="Login" class="btn btn-default" onclick="showExistingUser()">LOGIN</button>
@@ -59,7 +59,7 @@
 							
 							<div class="form-group">
 								<label for="pc">Postal Code:</label>
-								<input type="text" class="form-control" id="pc" name="postalCode" placeholder="A1A 1A1" pattern="[A-Z]|[a-z]+[0-9]+[A-Z]|[a-z]+ +[0-9]+[A-Z]|[a-z]+[0-9]" title="Ex. A1A 1A1">
+								<input type="text" class="form-control" id="pc" name="postalCode" placeholder="A1A1A1" pattern="[A-Za-z][0-9][A-Za-z][0-9]+[A-Za-z]+[0-9]" title="Ex. A1A 1A1">
 							</div>
 								
 							<div class="form-group">
@@ -98,11 +98,9 @@
 					
 				</div>
 				
-				<div id ="right-ish" class="col-sm-8">
+				<div id ="right-ish" class="col-sm-6">
 					<div class="row">
-						<div id="col-sm-12">
 							<iframe width="420" height="315" src="https://www.youtube.com/embed/ZfRr1Rcu5fw?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>
-						</div>
 					</div>
 				</div>
 			</div>

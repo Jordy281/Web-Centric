@@ -6,3 +6,7 @@ var showNewUser = function(){
     $("#loginForm").hide();
     $("#registrationForm").show();
 };
+var showEdit = function(){
+    $("#userInfo").hide();
+    $("#editInfo").show();
+};

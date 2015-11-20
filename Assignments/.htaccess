@@ -1,6 +1,0 @@
-
-Options ALL +Indexes
-
-DirectoryIndex index.shtml index.html lab2.html
-AddType text/html .shtml
-AddOutputFilter INCLUDES .shtml
