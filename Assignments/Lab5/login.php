@@ -36,7 +36,28 @@
         while (mysqli_stmt_fetch($stmt)) {
             if(strcmp($db_password,$password)==0){
                 $newUser= new User($id, $firstName,$lastName, $email, $password,$streetAddress,$postalCode,$DOB,$gender);
-                $newUser->sessionUser();
+                session_start();
+                $_SESSION["user"]=serialize($newUser);
+                
+                $query = "SELECT * FROM users WHERE id = ?";
+        
+                $stmt=mysqli_prepare($dbc,$query);
+                if ( !$stmt ) {
+                    die('mysqli error: '.mysqli_error($dbc));
+                }
+                mysqli_stmt_bind_param($stmt,"d",$id);
+                
+                if ( !mysqli_stmt_execute($stmt)){
+                    die( 'stmt error1: '.mysqli_stmt_error($stmt) );
+                }
+                
+                mysqli_stmt_bind_result($stmt, $id, $holder);
+                
+                while (mysqli_stmt_fetch($stmt)) {
+                    $newCart=Cart::Reciept($id, $holder, $dateCreated,$purchased,$datePurchase, $items, $shipTo, $shipAddress, $shipCity, $shipCountry);
+                    $_SESSION["cart"]=serialize($cart);
+                }
+                
                 header('Location: WelcomePage.php');
                 
             }else{

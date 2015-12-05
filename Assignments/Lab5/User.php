@@ -34,6 +34,12 @@
             echo "Postal Code: ".$this->postalCode."<br/>";
 
         }
+        /*
+        public function logout(){
+            $_SESSION['user']='';
+            $_SESSION['cart']='';
+            header('Location: index.php');
+        }
         
         public function sessionUser(){
             session_start();
@@ -47,7 +53,7 @@
             $_SESSION["DOB"]=$this->DOB;
             $_SESSION["gender"]=$this->gender;
         }
-
+        */
         
         
         

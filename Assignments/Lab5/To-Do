@@ -1,3 +1,20 @@
+User Page
+    -recent Transactions
+
+    
+Shopping Cart Page(user)
+    ->Access user.shopping
+    -Purchase(shopping)
+    -remove items(shopping)
+
 Welcome Page
-    -Update User info
-    -delete User info
+    -items to add to cart
+    
+Purchase page
+    -form for shipping and billing information
+    
+Logout Feature
+
+Transaction Table
+    Name, Date of purchase, items (max 3), shipping address
+    

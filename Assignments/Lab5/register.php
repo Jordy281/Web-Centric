@@ -1,9 +1,7 @@
 <?php
-    $pageTitle = 'The website';
-    
+  
     //header('Location: View.php');
-    include "User.php";
-    $Users = array();
+    require_once('User.php');
     
     require_once('../mysqli_connect.php');
     //echo "Connected to DB";
@@ -103,15 +101,53 @@
         mysqli_stmt_bind_result($stmt, $id);
         while (mysqli_stmt_fetch($stmt)) {
             $newUser= new User($id, $firstName,$lastName, $email, $password,$streetAddress,$postalCode,$DOB,$gender);
-            $newUser->sessionUser();
+            session_start();
+            $_SESSION["user"]=serialize($newUser);
+            
+            
+            
+            
+            
+            
+            //Make a new cart and save it to the DB
+            //Insert info into the database
+            $query = "INSERT INTO carts(holder) VALUES (?)";
+            //Prepare mysqli statement
+            $stmt=mysqli_prepare($dbc, $query);
+            if ( !$stmt ) {
+                die('mysqli error1: '.mysqli_error($dbc));
+            }
+            
+            //Bind parameters
+            mysqli_stmt_bind_param($stmt, "d", $id);
+            if ( !mysqli_execute($stmt) ) {
+                die( 'stmt error: '.mysqli_stmt_error($stmt) );
+            }
+            
+            //Query to get cart ID
+            $query="SELECT id FROM carts WHERE holder=?";
+            
+            $stmt=mysqli_prepare($dbc,$query);
+            if ( !$stmt ) {
+                die('mysqli error2: '.mysqli_error($dbc));
+            }
+            mysqli_stmt_bind_param($stmt,"d",$id);
+            
+            if ( !mysqli_stmt_execute($stmt)){
+                die( 'stmt error3: '.mysqli_stmt_error($stmt) );
+            }
+            
+            mysqli_stmt_bind_result($stmt, $cart_id);
+            
+            while (mysqli_stmt_fetch($stmt)) {
+                $newCart = new Cart($cart_id, $id);
+                $_SESSION=serialize($newCart);
+                header('Location: WelcomePage.php');
+            }  
         }
-         
+     
         
         
-        
-        
-        
-        header('Location: WelcomePage.php');
         
     }
     
