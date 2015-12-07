@@ -227,9 +227,10 @@
 						require_once('User.php');
 						
 						$user=unserialize($_SESSION["user"]);
+						$cart=unserialize($_SESSION["cart"]);
 						
-						$query = "SELECT * FROM carts WHERE purchase_id = ?";
-			
+						$query = "SELECT * FROM carts WHERE holder = ? AND purchased!='0'";
+						
 						$stmt=mysqli_prepare($dbc, $query);
 			
 						if ( !$stmt ) {
@@ -243,18 +244,17 @@
 						}
 						
 						mysqli_stmt_bind_result($stmt, $id, $holder, $dateCreated,$purchased,$datePurchase, $items, $shipTo, $shipAddress, $shipCity, $shipCountry);
-						$i=0;
+						
 						while (mysqli_stmt_fetch($stmt)) {
-							$cart[$i]=Cart::Reciept($id,$holder, $dateCreated,$purchased,$datePurchase, $items, $shipTo, $shipAddress, $shipCity, $shipCountry);
+							$cart=Cart::Reciept($id,$holder, $dateCreated,$purchased,$datePurchase, $items, $shipTo, $shipAddress, $shipCity, $shipCountry);
 							echo '<div class="row" style="padding-top: 5px; padding-bottom: 5px; background-color:#FFFFFF; border-radius: 5px">
 									<div class="col-sm-4">
 										Order #'.$id.'
 									</div>
 									<div class="col-sm-5">
-										Total: '.$cart[$i].cartTotal().'
+										Total: '.$cart->cartTotal().'
 									</div>
 								</div>';
-							$i=$i+1;
 						}
 					?>
 				</div>

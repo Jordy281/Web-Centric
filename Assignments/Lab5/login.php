@@ -3,6 +3,7 @@
     //Connect to the database
     require_once('../mysqli_connect.php');
     require_once('User.php');
+    require_once('Cart.php');
     if($_SERVER['REQUEST_METHOD']=='POST'){
         //Check Email
         if (preg_match ('%^[A-Za-z0-9._\%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$%', stripslashes(trim($_POST['email'])))) {
@@ -18,52 +19,19 @@
             $password = FALSE;
             echo '<p><font color="red" size="+1">Please enter a valid password!</font></p>';
         }       
+
+        // Load User
+        $newUser=User::loadUser($dbc,$email,$password);
         
-        $query = "SELECT * FROM users WHERE email = ?";
+        //Load Cart
+        $cart=$newUser->loadCart($dbc);
         
-        $stmt=mysqli_prepare($dbc,$query);
-        if ( !$stmt ) {
-            die('mysqli error: '.mysqli_error($dbc));
-        }
-        mysqli_stmt_bind_param($stmt,"s",$email);
+        //Save em to session
+        session_start();
+        $_SESSION["user"]=serialize($newUser);
+        $_SESSION["cart"]=serialize($cart);
         
-        if ( !mysqli_stmt_execute($stmt)){
-            die( 'stmt error1: '.mysqli_stmt_error($stmt) );
-        }
-        
-        mysqli_stmt_bind_result($stmt, $id, $firstName,$lastName,$email, $db_password, $streetAddress, $postalCode, $DOB, $gender);
-        
-        while (mysqli_stmt_fetch($stmt)) {
-            if(strcmp($db_password,$password)==0){
-                $newUser= new User($id, $firstName,$lastName, $email, $password,$streetAddress,$postalCode,$DOB,$gender);
-                session_start();
-                $_SESSION["user"]=serialize($newUser);
-                
-                $query = "SELECT * FROM users WHERE id = ?";
-        
-                $stmt=mysqli_prepare($dbc,$query);
-                if ( !$stmt ) {
-                    die('mysqli error: '.mysqli_error($dbc));
-                }
-                mysqli_stmt_bind_param($stmt,"d",$id);
-                
-                if ( !mysqli_stmt_execute($stmt)){
-                    die( 'stmt error1: '.mysqli_stmt_error($stmt) );
-                }
-                
-                mysqli_stmt_bind_result($stmt, $id, $holder);
-                
-                while (mysqli_stmt_fetch($stmt)) {
-                    $newCart=Cart::Reciept($id, $holder, $dateCreated,$purchased,$datePurchase, $items, $shipTo, $shipAddress, $shipCity, $shipCountry);
-                    $_SESSION["cart"]=serialize($cart);
-                }
-                
-                header('Location: WelcomePage.php');
-                
-            }else{
-                echo"Login Failed : <br>email: ".$email."<br>db:".$db_password." actual:".$password;
-            }
-        }
+        header('Location: WelcomePage.php');
         
         mysqli_close($dbc);
         

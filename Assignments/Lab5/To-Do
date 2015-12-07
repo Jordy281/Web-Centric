@@ -1,20 +1,19 @@
-User Page
-    -recent Transactions
-
     
 Shopping Cart Page(user)
-    ->Access user.shopping
-    -Purchase(shopping)
+    -create transaction objects
     -remove items(shopping)
+        -individual
+        -all
 
-Welcome Page
-    -items to add to cart
+    -change update in add.php to onHold
     
-Purchase page
-    -form for shipping and billing information
-    
-Logout Feature
+    -change Load cart to retrive individual items from basket table
 
-Transaction Table
-    Name, Date of purchase, items (max 3), shipping address
+Cart
+    -after purchased, update DB
     
+Login Bugs with old cart
+    
+    
+GET AND SET METHODS EVERYWHERE
+      

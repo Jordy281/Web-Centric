@@ -1,13 +1,13 @@
 <?php
     class Item{
         public $name;
-        public $id;
+        //public $id;
         public $value;
         
-        public function __construct($name, $id, $value){
-            $name= $this->name;
-            $id=$this->id;
-            $value=$this->value;
+        public function __construct($name, $value){
+            $this->name=$name;
+        //    $id=$this->id;
+            $this->value=$value;
         }
     }
     

@@ -1,9 +1,10 @@
 <?php
     
+    //save cart
     
     //clear session data
-    $_SESSION['user']='';
-    $_SESSION['cart']='';
+    var_dump($_SESSION['user']);
+    var_dump($_SESSION['cart']);
     
     //disconnect database
     require_once('../mysqli_connect.php');
