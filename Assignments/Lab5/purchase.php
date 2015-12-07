@@ -22,12 +22,12 @@
 		}
         
 
-        // Check for an email address.
+        	// Check for an email address.
 		if (preg_match ('%^[A-Za-z0-9._\%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$%', stripslashes(trim($_POST['Bemail'])))) {
 			$email = escape_data($_POST['Bemail']);
 		}
         
-        // Check for a street.
+        	// Check for a street.
 		if (preg_match ('%^[A-Za-z0-9\.\' \-]{5,30}$%', stripslashes(trim($_POST['BstreetAddress'])))) {
 			$BSA = escape_data($_POST['BstreetAddress']);
 		}
@@ -42,7 +42,7 @@
 			$BCoun = escape_data($_POST['Bcountry']);
 		}
     
-        //Check Postal Code
+		//Check Postal Code
 		if (preg_match ('%^[A-Za-z][0-9][A-Za-z][0-9][A-Za-z][0-9]$%', stripslashes(trim($_POST['BpostalCode'])))){
 			$BPC=escape_data($_POST['BpostalCode']);
 		}
@@ -57,15 +57,14 @@
 		}
         
         
-        //Check lastname
+        	//Check lastname
 		if (preg_match ('%^[A-Za-z\.\'\-]{2,15}$%', stripslashes(trim($_POST['SlastName'])))){
 			$SLN=escape_data($_POST['SlastName']);
 		}else{
 			$SLN=$BLN;
 		}
                 
-        // Check for a street.
-
+        	// Check for a street.
 		if (preg_match ('%^[A-Za-z0-9\.\' \-]{5,30}$%', stripslashes(trim($_POST['SstreetAddress'])))) {
 			$SSA = escape_data($_POST['SstreetAddress']);
 		}else{
@@ -86,7 +85,7 @@
 			$SCoun=$BCoun;
 		}
 		
-        //Check Postal Code
+        	//Check Postal Code
 		if (preg_match ('%^[A-Za-z][0-9][A-Za-z]" "[0-9][A-Za-z][0-9]$%', stripslashes(trim($_POST['SpostalCode'])))){
 			$SPC=escape_data($_POST['SpostalCode']);
 		}else{
@@ -95,31 +94,19 @@
 
 		//=====================================================
 
-		$query = "INSERT INTO transactions(pid,BFN,BLN,Email,BSA,BC,BCoun,BPC,SFN,SLN,SSA,SC,SCoun,SPC,items) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        
-        $stmt=mysqli_prepare($dbc, $query);
 		
-        if ( !$stmt ) {
-            die('mysqli error: '.mysqli_error($dbc));
-        }
 
-        mysqli_stmt_bind_param($stmt, "dssssssssssssss", $cart->holder,$BFN,$BLN,$email,$BSA,$BC,$BCoun, $BPC, $SFN,$SLN,$SSA,$SC,$SCoun, $SPC, $cart->items);
-
-		if ( !mysqli_execute($stmt) ) {
-            die( 'stmt error: '.mysqli_stmt_error($stmt) );
-        }
-
-		$cart->purchase();
+		$cart->purchase($BFN,$BLN,$email,$BSA,$BC,$BCoun, $BPC, $SFN,$SLN,$SSA,$SC,$SCoun,$SPC);
 		
 		//
 		unset($_SESSION['cart']);
 		unset($cart);
 		
 		//Make a new cart and save it to the DB
-        $cart = $user->newCart($user->getID());
-        $_SESSION["cart"]=serialize($newCart);
-		
-        header('Location: WelcomePage.php');
+	        $cart = $user->newCart($user->getID());
+	        $_SESSION["cart"]=serialize($newCart);
+			
+	        header('Location: WelcomePage.php');
         
 	}
 ?>
