@@ -83,9 +83,26 @@
         }
         
         //This function is called on purcahse indicating the order is complete
-        public function purchase(){
+        public function purchase($BFN,$BLN,$email,$BSA,$BC,$BCoun, $BPC, $SFN,$SLN,$SSA,$SC,$SCoun,$SPC){
+            $this->newTransaction($BFN,$BLN,$email,$BSA,$BC,$BCoun, $BPC, $SFN,$SLN,$SSA,$SC,$SCoun,$SPC);
             $this->datePurchased=time();
             $this->purchased=1;
+        }
+        
+        public function newTransaction($BFN,$BLN,$email,$BSA,$BC,$BCoun, $BPC, $SFN,$SLN,$SSA,$SC,$SCoun,$SPC){
+            $query = "INSERT INTO transactions(pid,BFN,BLN,Email,BSA,BC,BCoun,BPC,SFN,SLN,SSA,SC,SCoun,SPC,items) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        
+            $stmt=mysqli_prepare($dbc, $query);
+    		
+            if ( !$stmt ) {
+                die('mysqli error: '.mysqli_error($dbc));
+            }
+    
+            mysqli_stmt_bind_param($stmt, "dssssssssssssss", $this->holder,$BFN,$BLN,$email,$BSA,$BC,$BCoun, $BPC, $SFN,$SLN,$SSA,$SC,$SCoun, $SPC, $this->items);
+    
+    		if ( !mysqli_execute($stmt) ) {
+                die( 'stmt error: '.mysqli_stmt_error($stmt) );
+            }
         }
         
         /*
