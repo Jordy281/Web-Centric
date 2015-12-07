@@ -6,7 +6,6 @@
     $cart= unserialize($_SESSION["cart"]);
     $ball= new Item("Soccer Ball",10);
     $cart->addItem($ball);
-    $cart->update($dbc);
 	
     $_SESSION["cart"]=serialize($cart);
     
