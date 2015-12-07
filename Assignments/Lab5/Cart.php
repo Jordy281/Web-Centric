@@ -6,12 +6,6 @@
         public $datePurchase;
         public $items;
         
-        //Shipping Information
-        public $shipTo;
-        public $shipAddress;
-        public $shipCity;
-        public $shipCountry;
-        
         //Create the cart
         public function __construct($holder){
                 $this->holder=$holder;
@@ -20,26 +14,55 @@
             
         }
         
-        public static function loadCart($dbc, $id,$holder){
-            $instance = new self($holder);
-            $instance->loadByID($dbc,$id);
-            return $instance;
-        }
-        
         public static function newCart($dbc,$holder){
             $instance = new self($holder);
             $instance->insertCart($dbc,$holder);
             return $instance;
         }
         
+        public static function loadCart($dbc, $id,$holder){
+            $instance = new self($holder);
+            $instance->loadByID($dbc,$id);
+            $instance->loadItems($dbc);
+            return $instance;
+        }
+        
+        public function loadItems($dbc){
+            $query = "SELECT * FROM basket WHERE cartID=?"
+            $stmt=mysqli_prepare($dbc,$query);
+            
+            if ( !$stmt ) {
+                die('mysqli error: '.mysqli_error($dbc));
+            }
+            
+            mysqli_stmt_bind_param($stmt,"d",$this->id);
+            
+            if ( !mysqli_execute($stmt) ) {
+                die( 'stmt error: '.mysqli_stmt_error($stmt) );
+            }
+            
+            mysqli_stmt_bind_result($stmt, $id, $name,$value,$cartID);
+            $items= array();
+            while (mysqli_stmt_fetch($stmt)) {
+                $item = new Item($name,$value);
+                array_push($this->items,$item);
+            }
+        }
+        
+        
+        public function saveCart($dbc){
+            foreach($this->items as $item){
+                $item->saveItem($dbc, $this->id);
+            }
+        }
+        
             
         public function fill($stmt){
             while (mysqli_stmt_fetch($stmt)) {
-                $this->id= $id;
+                $this->id= $uid;
                 $this->holder=$holder;
                 $this->purchased=$purchased;
                 $this->datePurchased=$datePurchase;
-                $this->items=$items;
             }
         }
         
@@ -57,14 +80,6 @@
                     array_splice($items,$index,1);
                 }
             }
-        }
-        
-        //This function changes where to ship the package to
-        public function shipOut($to, $sa, $scity, $scountry){
-            $this->shipTo=$to;
-            $this->shipAddress=$sa;
-            $this->shipCity=$scity;
-            $this->shipCountry=$scountry;
         }
         
         //This function is called on purcahse indicating the order is complete
@@ -126,7 +141,7 @@
                 die( 'stmt error1: '.mysqli_stmt_error($stmt) );
             }
             
-            mysqli_stmt_bind_result($stmt, $this->id, $this->holder, $this->dateCreated,$this->purchased,$this->datePurchase, $this->items);
+            mysqli_stmt_bind_result($stmt, $uid, $holder, $dateCreated,$purchased,$datePurchase, $items);
             
             $this->fill($stmt);
         }
